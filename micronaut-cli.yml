@@ -1,5 +1,0 @@
-profile: service
-defaultPackage: onboarding.bff
----
-testFramework: junit
-sourceLanguage: java
