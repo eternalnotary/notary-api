@@ -23,6 +23,7 @@ jobs:
     - docker push $REPO
 notifications:
   slack:
-    rooms: 
+    rooms:
+      secure: Uczt31Sri+vYCnke6rC2zE+gwbnR0IyFCQdyi89lveK9dWAlbTKl8az46t78cHsoaolTdJoK7NutrZ5Evx683x7WDlJ8XQaeZOwUnLnw9tX2hhZCJoGDbfyM08kovovWiwMlJbkicHr2bkBfjUUdn/Wihh51Ax8xbHaCUownBxJU87i2ncgR1/Io9DD///18BWhOnkM4eqjVnlhXR+vpfFc5qZTzZjYu1gihcb/4SJeKFoWYamjMpahjcgyD6vzLTkP9x3wP1vDgH7YLJvIroMi9jsfM6I3FdGRjETf0DiGY7dlKtxaK1sSFtNwmrtWe/ia8v3zduujoFyjEjEJLAPXuk8LDa82yk5nHhpMZzINVNVt/T54riyKler+cEjPRwyrrc3zVQHVH/46vtHPmmH2nvRI2z7E2L/6CaCwfSfzV9TKNaCI8RyD6NgUFVhraPSTkPZ4P2e21U/PIb/5+jIcYPJkmPZNsMx6FAuLoG6rwtk32pI16cKYjFr1g7zwrPYolsvL+f76uLolAvG8JuEY0ek58JUOzCwhJrKRS4E5Kn137fx+JGDOV4jS5i6tFhPYGmXXdR5knNf7pxbDBDGVQG5oq2Gl5exfda+II2XcMk89ESQJvikYq7pp9Td9NQqbkfzX4wMlSPgOK95oAe6DGK3CI3sczwahN6POo3+s=
     on_success: always
     on_failure: always
