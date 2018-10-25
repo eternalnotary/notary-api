@@ -1,0 +1,28 @@
+sudo: required
+language: java
+services:
+- docker
+jdk: openjdk11
+env:
+  global:
+  - COMMIT=${TRAVIS_COMMIT::7}
+  - secure: Y1iUkM85yJkVNChFsabWaaP8Zj9R/DlAdtRf8PGjbpqphOx+TEs5FHFY9Yu/UsHA8DGZrAk5OrT7l+1rd+ta3ZCOssnYMOqBM2IzT3lFJtZ+ZePvip3opO/dhjh3g9usoYjfXNSgsVAC2EW4uzBW64H/9mLu+v/kt8FzT2FYuTfaoxNnI99ztNBdYWzCvOgbpAfdJT4jWmsK+3/JUSYGniry7rcCC5qkl9EQjdi4wXQB11bLm8zBcCrKB++QobGs/G5TzeciCWhUO1VUmdF22bz7bLhZ5SnSITArADUBATjLVAC4ZF9GSX/K5vD9es703zDCSH0K5lTIu3iQwPIS2RNgm1KX9GnA+0NvbsW5rn2jHNtD8CNB8vudyEWD+BFuwd7RuWRU98CROOjMPZyGTa6VyQP3jmDcMofqUdr89DELNHcpzlXVK/Qx8e9E4B47yUMNuhDV9SB34UTt0kbg4N2wruFDLN9wmyktvcaAdTRx7u+Uza7pmKDeeYi68rSP+x7abfVIBAaLJOu5+hGsq6BvLotjZsdprlUam9WLg5DK9b8zXeREq1gz5SBCOnRQg3A/RKXL+i/+/nk58g1vie6CrbP4vmxEgrf69jWy07QCT0nDQxGxGQRC73D5iyPFelQMZZuDpPVw0wmtlkNN5EecHmQsTPckhQEgsEj/auY=
+  - secure: R/SUqeaDC4IMrb2tkhlpjGVTiIlzM8wKRcQdYW+jqdfDceGt8BCpqi00PHuKECisaFpS4LixBs+6RtB+jFxhBn+/u/17TN1z9uVc0h5L5YEAJ4efX/RKbAVGfaA93pnsVr+oxccghgrj3oN4KNZBTZ/a/37lBvmUpyVIWvd/3qxjUs+O1jKb4eQpaAQF/wb/LPfkMTU07i6Dy3EWRUWnP+2vYRIfdFMwfbmtk5UlMSjGyDkUETIOEBfGCxlzYzByQ7Wo5Qg0CNfIuAjkA2NqILPJ8g82r2OYpzuTXpQlTJFt8gSdxR90NaM9uZbTxdECQo9S6sK0MOykkVXrjPFsYJ8A0ImS4JIfoQ9vS6TQHxcGKZqd8Qw7B0/qUOcvv88dYOxdsEg2S9AyDgkdyXDi5CTEEWgL1fusVwjFkFohhwyN1F0bCJCbsjfirvthKQ8Z/qTDvJjg+9iekLRSumAWU71lpEwJGvGxWskL3oz20sTFcFNHfepaUMt5XrAA6eLglyORze1wl2oKnWGUPEsLkxypP3KPEwP7kxPtKsxFfpudd1+3p0QYvDGbOXjK7BEoQ9Ei/WtfHwFeCeXnV4c77tOTkooz0lJ4QmjKsJk7og3IZKvXbcFfCmWjWa78Jr9/U+aUjEd6iEwBYxZ0W3akkv9+8uyceqsWzcgh+iQmYqQ=
+  - secure: QMdRZqVH+rpeIEVcOu9Kmc1KFqO0tHZQCGATJdHkuGTs0Mwzxxd4hsAzZsCsaBKSdTi5VXToKHZzDtYlOwze0XYMd6RKdQ8CIEySIdGph7TrJvCbIAJklZEcotvfki9qXU6MZiIiukoqrywqHcqEW+MA3GxfGDXDmsLp0yqx0KViXuVj+yg0qfWJfTuM2PFDHXSQiU70R7S7dZxa8EXNpVcavse3KD7aEvuw5ypRbvfUNswHE1IaNgdaUJ21hhRo5SJS/zxQ/f7MPHbde95OyoyWsOPH/JB/So6ztnzs3pk03CeADg3s6oDSyLrYazLkF1C07GMw3nXidxBVo8qUJN8J+um2evVi/zGaSk3wc++aTiEiFiPow9+GFyoOhMkE2/kksHl9yqCI4GGO1oxvZndph55Us7guXN8/f766yzJG4zV65VoKHNDVXvVN/YbneM2fiI0TnEAIHhFggCUDCr1A7Zfoks1FcqKYSFba3KDSQWquuZgl1d4+loYnhAtljyTvlrzBQuobSE0AWafgtzSYm5jwAfn1iVWtdVNvqFfBGHmbhOAnBR7iu7UJUGlPZ2Zlv2Cu6QqzDQ9NLEsqMzcMxVibqwf+zQareRvgf1/K5+CRlNyt1gZpgv8D3jFxf5ZU7w187ZD2rcEay79PscT6cmHYyi77lyxs6khO8b8=
+jobs:
+  include:
+  - stage: production build
+    script:
+    - docker login -u $DOCKER_USER -p $DOCKER_PASS
+    - export REPO=eternalnotary/notary-api
+    - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo
+      $TRAVIS_BRANCH | sed 's/\//_/g' ; fi`
+    - docker build -f Dockerfile -t $REPO:$COMMIT .
+    - docker tag $REPO:$COMMIT $REPO:$TAG
+    - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+    - docker push $REPO
+notifications:
+  slack:
+    rooms: 
+    on_success: always
+    on_failure: always
